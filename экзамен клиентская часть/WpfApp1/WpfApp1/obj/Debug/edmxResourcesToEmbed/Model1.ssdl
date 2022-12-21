@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище АбонентыModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Абоненты">
+    <Key>
+      <PropertyRef Name="ID Абонента" />
+    </Key>
+    <Property Name="Номер&#xD;&#xA;абонента" Type="int" />
+    <Property Name="ФИО &#xD;&#xA;абонента" Type="nvarchar" MaxLength="50" />
+    <Property Name="Адрес" Type="nvarchar" MaxLength="50" />
+    <Property Name="ID Абонента" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Разговоры">
+    <Key>
+      <PropertyRef Name="ID Разговора" />
+    </Key>
+    <Property Name="№&#xD;&#xA;разговора" Type="int" />
+    <Property Name="Дата&#xD;&#xA;разговора" Type="datetime" Nullable="false" />
+    <Property Name="Время (продолжительность&#xD;&#xA;(продолжительность)" Type="int" Nullable="false" />
+    <Property Name="ID Разговора" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Тарифы">
+    <Key>
+      <PropertyRef Name="ID Тарифа" />
+    </Key>
+    <Property Name="код&#xD;&#xA;города" Type="int" />
+    <Property Name="название&#xD;&#xA;города" Type="nvarchar" MaxLength="50" />
+    <Property Name="тариф&#xD;&#xA;(стоимость 1 мин.)" Type="money" />
+    <Property Name="П&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;ризнак &#xD;&#xA;оплаты" Type="nvarchar" MaxLength="50" />
+    <Property Name="ID Тарифа" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Телефон">
+    <Key>
+      <PropertyRef Name="ID Телефона" />
+    </Key>
+    <Property Name="Номер телефона" Type="int" />
+    <Property Name="Номер договора" Type="nchar" MaxLength="10" />
+    <Property Name="Дата &#xD;&#xA;установки телефона" Type="nchar" MaxLength="10" />
+    <Property Name="ID Телефона" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Разговоры_Тарифы">
+    <End Role="Тарифы" Type="Self.Тарифы" Multiplicity="1" />
+    <End Role="Разговоры" Type="Self.Разговоры" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Тарифы">
+        <PropertyRef Name="ID Тарифа" />
+      </Principal>
+      <Dependent Role="Разговоры">
+        <PropertyRef Name="ID Разговора" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Тарифы_Телефон">
+    <End Role="Телефон" Type="Self.Телефон" Multiplicity="0..1" />
+    <End Role="Тарифы" Type="Self.Тарифы" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Телефон">
+        <PropertyRef Name="ID Телефона" />
+      </Principal>
+      <Dependent Role="Тарифы">
+        <PropertyRef Name="название&#xD;&#xA;города" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Телефон_Абоненты">
+    <End Role="Абоненты" Type="Self.Абоненты" Multiplicity="0..1" />
+    <End Role="Телефон" Type="Self.Телефон" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Абоненты">
+        <PropertyRef Name="ID Абонента" />
+      </Principal>
+      <Dependent Role="Телефон">
+        <PropertyRef Name="Номер телефона" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище АбонентыModelContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Абоненты" EntityType="Self.Абоненты" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Разговоры" EntityType="Self.Разговоры" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Тарифы" EntityType="Self.Тарифы" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Телефон" EntityType="Self.Телефон" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Разговоры_Тарифы" Association="Self.FK_Разговоры_Тарифы">
+      <End Role="Тарифы" EntitySet="Тарифы" />
+      <End Role="Разговоры" EntitySet="Разговоры" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Тарифы_Телефон" Association="Self.FK_Тарифы_Телефон">
+      <End Role="Телефон" EntitySet="Телефон" />
+      <End Role="Тарифы" EntitySet="Тарифы" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Телефон_Абоненты" Association="Self.FK_Телефон_Абоненты">
+      <End Role="Абоненты" EntitySet="Абоненты" />
+      <End Role="Телефон" EntitySet="Телефон" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
